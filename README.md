@@ -14,6 +14,9 @@ bash script ini terdiri dari LEMP stack.
 3. password WP
 
 Untuk subdomain sementara bisa hilangkan opsi www.domain.tld pada installasi SSL Let'Ecrypt.
+
+`$ certbot run -n --nginx --agree-tos -d $domain -m  $emailssl  --redirect`
+
 # Spesifikasi Shell
 1. PHP-FPM 7.4
 2. Wordpress Latest
