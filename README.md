@@ -7,7 +7,6 @@ bash script ini terdiri dari LEMP stack.
 1. Nginx
 2. PHP-FPM
 3. MariaDB
-4. SSL Let's Encrypt
 
 # Fitur pada bash script ini.
 1. Input domain
@@ -15,4 +14,10 @@ bash script ini terdiri dari LEMP stack.
 3. password WP
 
 Untuk subdomain sementara bisa hilangkan opsi www.domain.tld pada installasi SSL Let'Ecrypt.
-
+# Spesifikasi Shell
+1. PHP-FPM 7.4
+2. Wordpress Latest
+3. Nginx Latest
+4. MariaDB Latest
+5. WP-CLI
+6. SSL Let's Encrypt
