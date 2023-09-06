@@ -35,35 +35,113 @@ read -p "Pilih Versi PHP = " versiphp
 if  [ "$versiphp" = "1" ]
 then 
     sudo apt update && apt upgrade -y
+    sudo apt install nginx -y
+    sudo apt install mariadb-server -y
     sudo apt install software-properties-common 
     sudo add-apt-repository ppa:ondrej/php -y
     sudo apt install php7.4-fpm php7.4-common php7.4-xml php7.4-zip php7.4-mysql php7.4-mbstring php7.4-json php7.4-curl php7.4-gd php7.4-pgsql -y
     sudo systemctl restart php7.4-fpm
+    cat > /etc/nginx/sites-available/$domain.conf <<EOF
+server {
+    listen 80;
+    server_name www.$domain $domain;
+    root /var/www/$domain;
+    index index.php index.html index.htm;
+
+    location / {
+      try_files \$uri \$uri/ /index.php?\$query_string;
+    }
+
+    location ~ \.php$ {
+      try_files \$fastcgi_script_name =404;
+      include fastcgi_params;
+      fastcgi_pass    unix:/run/php/php7.4-fpm.sock;
+      fastcgi_index   index.php;
+      fastcgi_param DOCUMENT_ROOT    \$realpath_root;
+      fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name; 
+    }
+
+    access_log /var/log/nginx/${domain}_access.log;
+    error_log /var/log/nginx/${domain}_error.log;
+}
+EOF
+ln -s /etc/nginx/sites-available/${domain}.conf /etc/nginx/sites-enabled/
+
 elif [ "$versiphp" = "2" ]
 then 
     sudo apt update && apt upgrade -y
+    apt install nginx -y
+    apt install mariadb-server -y
     sudo apt install software-properties-common 
     sudo add-apt-repository ppa:ondrej/php -y
     sudo apt install php8.0-fpm php8.0-common php8.0-xml php8.0-zip php8.0-mysql php8.0-mbstring php8.0-json php8.0-curl php8.0-gd php8.0-pgsql -y
     sudo systemctl restart php8.0-fpm
+    cat > /etc/nginx/sites-available/$domain.conf <<EOF
+server {
+    listen 80;
+    server_name www.$domain $domain;
+    root /var/www/$domain;
+    index index.php index.html index.htm;
+
+    location / {
+      try_files \$uri \$uri/ /index.php?\$query_string;
+    }
+
+    location ~ \.php$ {
+      try_files \$fastcgi_script_name =404;
+      include fastcgi_params;
+      fastcgi_pass    unix:/run/php/php8.0-fpm.sock;
+      fastcgi_index   index.php;
+      fastcgi_param DOCUMENT_ROOT    \$realpath_root;
+      fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name; 
+    }
+
+    access_log /var/log/nginx/${domain}_access.log;
+    error_log /var/log/nginx/${domain}_error.log;
+}
+EOF
+ln -s /etc/nginx/sites-available/${domain}.conf /etc/nginx/sites-enabled/
+
 elif [ "$versiphp" = "3" ]
 then 
     sudo apt update && apt upgrade -y
+    sudo apt install nginx -y
+    sudo apt install mariadb-server -y
     sudo apt install software-properties-common 
     sudo add-apt-repository ppa:ondrej/php -y
     sudo apt install php8.1-fpm php8.1-cli php8.1-common php8.1-mysql php8.1-zip php8.1-gd php8.1-mbstring php8.1-curl php8.1-xml php8.1-bcmath -y
     sudo systemctl restart php8.1-fpm
+    touch /etc/nginx/sites-available/$domain.conf
+    cat > /etc/nginx/sites-available/$domain.conf <<EOF
+server {
+    listen 80;
+    server_name www.$domain $domain;
+    root /var/www/$domain;
+    index index.php index.html index.htm;
+
+    location / {
+      try_files \$uri \$uri/ /index.php?\$query_string;
+    }
+
+    location ~ \.php$ {
+      try_files \$fastcgi_script_name =404;
+      include fastcgi_params;
+      fastcgi_pass    unix:/run/php/php8.1-fpm.sock;
+      fastcgi_index   index.php;
+      fastcgi_param DOCUMENT_ROOT    \$realpath_root;
+      fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name; 
+    }
+
+    access_log /var/log/nginx/${domain}_access.log;
+    error_log /var/log/nginx/${domain}_error.log;
+}
+EOF
+ln -s /etc/nginx/sites-available/${domain}.conf /etc/nginx/sites-enabled/
+
 else 
     echo "pilian tidak sesuai"
 fi
 
-echo "Install Nginx"
-apt install nginx -y
-echo "Nginx berhasil di install"
-
-echo "Install database mariadb"
-apt install mariadb-server -y
-echo "Install MariaDB Berhasil"
 echo "============================================"
 echo "======LEMP Stack Berhasil di Install========"
 echo "============================================"
@@ -125,44 +203,7 @@ perl -i -pe'
   }
   s/put your unique phrase here/salt()/ge
 ' wp-config.php
-#variable
-uri="$uri"
-query_string="$query_string"
-fastcgi_script_name="$fastcgi_script_name"
-realpath_root="$realpath_root"
 
-
-echo "======================================"
-echo "========Konfig Server Block==========="
-echo "======================================"
-
-touch /etc/nginx/sites-available/$domain.conf
-cat > /etc/nginx/sites-available/$domain.conf <<EOF
-server {
-    listen 80;
-    server_name www.$domain $domain;
-    root /var/www/$domain;
-    index index.php index.html index.htm;
-
-    location / {
-      try_files \$uri \$uri/ /index.php?\$query_string;
-    }
-
-    location ~ \.php$ {
-      try_files \$fastcgi_script_name =404;
-      include fastcgi_params;
-      fastcgi_pass    unix:/run/php/php7.4-fpm.sock;
-      fastcgi_index   index.php;
-      fastcgi_param DOCUMENT_ROOT    \$realpath_root;
-      fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name; 
-    }
-
-    access_log /var/log/nginx/${domain}_access.log;
-    error_log /var/log/nginx/${domain}_error.log;
-}
-EOF
-
-ln -s /etc/nginx/sites-available/${domain}.conf /etc/nginx/sites-enabled/ 
 sudo systemctl restart nginx
 echo "======================================"
 echo "=============Konfig Aman=============="
