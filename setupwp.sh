@@ -74,7 +74,7 @@ then
     apt install mariadb-server -y
     sudo apt install software-properties-common 
     sudo add-apt-repository ppa:ondrej/php -y
-    sudo apt install php8.0-fpm php8.0-common php8.0-xml php8.0-zip php8.0-mysql php8.0-mbstring php8.0-json php8.0-curl php8.0-gd php8.0-pgsql -y
+    sudo apt install php8.0-fpm php8.0-common php8.0-xml php8.0-zip php8.0-mysql php8.0-mbstring php8.0-curl php8.0-gd php8.0-pgsql -y
     sudo systemctl restart php8.0-fpm
     cat > /etc/nginx/sites-available/$domain.conf <<EOF
 server {
