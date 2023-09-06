@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "====================================================="
-echo "====Install Wordpress V.1.0 by Ramdani IDCloudHost==="
+echo "====Install Wordpress V.1.1 by Ramdani==="
 echo "====================================================="
 echo "1. Install Nginx"
 echo "2. Install MariaDB"
@@ -13,25 +13,53 @@ echo "============================================="
 echo "Membuat Website Wordpress"
 echo "============================================="
 
-read -p "Nama Domain/subdomain = " domain
+read -p "Nama Domain = " domain
 read -p "Judul Website = " wpjudul
 read -p "Username = " wpadmin
 read -p "Password = " wppass
 read -p "Email admin = " wpemail
 read -p "Email SSL Info = " emailssl
 
-echo "update dan upgrade"
-apt update && apt upgrade -y
+echo "==========================="
+echo "Instal PHP-FPM"
+echo "==========================="
+echo "Pilih Angaka 1-3"
+echo "---------------------------"
+echo "1. Versi PHP 7.4"
+echo "2. Versi PHP 8.0"
+echo "3. Versi PHP 8.1"
+echo "============================"
+
+read -p "Pilih Versi PHP = " versiphp
+ 
+if  [ "$versiphp" = "1" ]
+then 
+    sudo apt update && apt upgrade -y
+    sudo apt install software-properties-common 
+    sudo add-apt-repository ppa:ondrej/php -y
+    sudo apt install php7.4-fpm php7.4-common php7.4-xml php7.4-zip php7.4-mysql php7.4-mbstring php7.4-json php7.4-curl php7.4-gd php7.4-pgsql -y
+    sudo systemctl restart php7.4-fpm
+elif [ "$versiphp" = "2" ]
+then 
+    sudo apt update && apt upgrade -y
+    sudo apt install software-properties-common 
+    sudo add-apt-repository ppa:ondrej/php -y
+    sudo apt install php8.0-fpm php8.0-common php8.0-xml php8.0-zip php8.0-mysql php8.0-mbstring php8.0-json php8.0-curl php8.0-gd php8.0-pgsql -y
+    sudo systemctl restart php8.0-fpm
+elif [ "$versiphp" = "3" ]
+then 
+    sudo apt update && apt upgrade -y
+    sudo apt install software-properties-common 
+    sudo add-apt-repository ppa:ondrej/php -y
+    sudo apt install php8.1-fpm php8.1-cli php8.1-common php8.1-mysql php8.1-zip php8.1-json php8.1-gd php8.1-mbstring php8.1-curl php8.1-xml php8.1-bcmath -y
+    sudo systemctl restart php8.1-fpm
+else 
+    echo "pilian tidak sesuai"
+fi
 
 echo "Install Nginx"
 apt install nginx -y
 echo "Nginx berhasil di install"
-
-echo "Install dan Add repo PPA for PHP 7.4"
-sudo apt install software-properties-common 
-sudo add-apt-repository ppa:ondrej/php -y
-apt install php7.4-fpm php7.4-common php7.4-xml php7.4-zip php7.4-mysql php7.4-mbstring php7.4-json php7.4-curl php7.4-gd php7.4-pgsql -y   
-echo "install PHP 7.4 Selesai"
 
 echo "Install database mariadb"
 apt install mariadb-server -y
@@ -59,7 +87,7 @@ dbuser="wp_user"
 dbpass="Mkdj2kdnJNks"
 dbname="wp_db"
 
-#create wp config
+#membuat wp config
 echo "========================================="
 echo "Membuat konfigurasi file..."
 cd /var/www/$domain
@@ -135,6 +163,7 @@ server {
 EOF
 
 ln -s /etc/nginx/sites-available/${domain}.conf /etc/nginx/sites-enabled/ 
+sudo systemctl restart nginx
 echo "======================================"
 echo "=============Konfig Aman=============="
 echo "======================================"
@@ -145,6 +174,7 @@ echo "======================================"
 
 apt install certbot python3-certbot-nginx -y
 certbot run -n --nginx --agree-tos -d $domain,www.$domain  -m  $emailssl  --redirect
+sudo systemctl restart nginx
 
 cat > /root/${domain}-akses.txt << EOF
 ==============================================================
