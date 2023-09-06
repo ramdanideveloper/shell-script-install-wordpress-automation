@@ -51,7 +51,7 @@ then
     sudo apt update && apt upgrade -y
     sudo apt install software-properties-common 
     sudo add-apt-repository ppa:ondrej/php -y
-    sudo apt install php8.1-fpm php8.1-cli php8.1-common php8.1-mysql php8.1-zip php8.1-json php8.1-gd php8.1-mbstring php8.1-curl php8.1-xml php8.1-bcmath -y
+    sudo apt install php8.1-fpm php8.1-cli php8.1-common php8.1-mysql php8.1-zip php8.1-gd php8.1-mbstring php8.1-curl php8.1-xml php8.1-bcmath -y
     sudo systemctl restart php8.1-fpm
 else 
     echo "pilian tidak sesuai"
