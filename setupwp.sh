@@ -218,10 +218,10 @@ certbot run -n --nginx --agree-tos -d $domain,www.$domain  -m  $emailssl  --redi
 sudo systemctl restart nginx
 
 cat > /root/${domain}-akses.txt << EOF
-==============================================================
+================================================================
 =============Selamat Website wordpress berhasil dibaut!=========
-=============== by Ramdani IDCloudHost =======================
---------------------------------------------------------------
+======================== by Ramdani.web.id =====================
+----------------------------------------------------------------
 
 Alamat Website: https://${domain}
 Login Website: https://${domain}/wp-admin
